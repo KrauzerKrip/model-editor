@@ -2,6 +2,21 @@ cmake_minimum_required (VERSION 3.13)
 
 project(lc_client)
 
+include(E:/Industry/industry/vcpkg/scripts/buildsystems/vcpkg.cmake)
+
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+find_package(EnTT CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
+find_package(pugixml CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_path(LUABRIDGE_INCLUDE_DIRS "LuaBridge/List.h")
+find_package(Lua REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(freetype CONFIG REQUIRED)
+
+
 target_link_libraries(lc_client PUBLIC glfw glad::glad EnTT::EnTT)
 target_link_libraries(lc_client PUBLIC glm::glm)
 target_link_libraries(lc_client PRIVATE assimp::assimp)
@@ -10,7 +25,7 @@ target_link_libraries(lc_client PRIVATE nlohmann_json::nlohmann_json)
 target_include_directories(lc_client PRIVATE ${LUABRIDGE_INCLUDE_DIRS})
 target_include_directories(lc_client PRIVATE ${LUA_INCLUDE_DIR})
 target_link_libraries(lc_client PRIVATE ${LUA_LIBRARIES})
-target_link_libraries(lc_client PRIVATE imgui)
+target_link_libraries(lc_client PRIVATE imgui::imgui)
 target_link_libraries(lc_client PRIVATE freetype)
 
 #target_link_libraries(lc_client PRIVATE eng::rc)

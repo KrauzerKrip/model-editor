@@ -394,9 +394,3 @@ FodyWeavers.xsd
 *.exe
 *.out
 *.app
-
-
-# Project defined
-
-build/
-lc_client/Testing/Temporary/
