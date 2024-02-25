@@ -13,9 +13,9 @@ add_library(stb INTERFACE)
 add_subdirectory("lc_client")
 add_subdirectory("libs")
 
-add_subdirectory("game")
+add_subdirectory("editor")
 
 set(CMAKE_CXX_SCAN_FOR_MODULES true)
 
-target_include_directories(game PRIVATE lc_client)
-target_link_libraries(game lc_client)
+target_include_directories(editor PRIVATE lc_client)
+target_link_libraries(editor lc_client)
