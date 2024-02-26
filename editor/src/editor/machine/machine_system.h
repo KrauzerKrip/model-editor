@@ -16,7 +16,7 @@ public:
 	MachineSystem(eng::IResource* pResource, entt::registry* pRegistry, PhysicalConstants* pPhysicalConstants);
 
 	void input(float deltaTime);
-	void update(float deltaTime);
+	void frame(float deltaTime);
 	void machineUpdate(float deltaTime);
 	void frame(float deltaTime);
 

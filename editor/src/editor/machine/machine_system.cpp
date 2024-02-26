@@ -29,8 +29,8 @@ void MachineSystem::input(float deltaTime) {
 	}
 }
 
-void MachineSystem::update(float deltaTime) { 
-	m_machineLoadingSystem.update();
+void MachineSystem::frame(float deltaTime) { 
+	m_machineLoadingSystem.frame();
 
 	auto tasks = m_pRegistry->view<Blueprint, Task>();
 	
@@ -41,7 +41,7 @@ void MachineSystem::update(float deltaTime) {
 	}
 
     for (BaseMachineSystem* pMachineSystem : m_machineSystems) {
-		pMachineSystem->update(deltaTime);
+		pMachineSystem->frame(deltaTime);
 	}
 }
   

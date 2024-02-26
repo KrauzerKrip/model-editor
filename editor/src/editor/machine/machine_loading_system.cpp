@@ -11,7 +11,7 @@ MachineLoadingSystem::MachineLoadingSystem(eng::IResource* pResource, entt::regi
 	m_pRegistry = pRegistry;
 }
 
-void MachineLoadingSystem::update() { 
+void MachineLoadingSystem::frame() { 
 	auto machineRequests = m_pRegistry->view<MachineRequest>();
 
 	for (auto&& [entity, request] : machineRequests.each()) {

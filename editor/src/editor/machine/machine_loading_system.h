@@ -12,7 +12,7 @@ class MachineLoadingSystem {
 public:
 	MachineLoadingSystem(eng::IResource* pResource, entt::registry* pRegistry);
 
-	void update();
+	void frame();
 
 private:
 	void addMachineComponent(entt::entity entity, MachineType type);

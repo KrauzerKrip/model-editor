@@ -26,7 +26,7 @@ public:
 
 	void open();
 	void close();
-	void update();
+	void frame();
 	
 	bool isOpened();
 

@@ -18,4 +18,4 @@ add_subdirectory("editor")
 set(CMAKE_CXX_SCAN_FOR_MODULES true)
 
 target_include_directories(editor PRIVATE lc_client)
-target_link_libraries(editor lc_client)
+target_link_libraries(editor PRIVATE lc_client)

@@ -20,7 +20,7 @@ public:
      * \brief 
      * \param deltaTime time between updates
      */
-    virtual void update(float deltaTime) = 0;
+    virtual void frame(float deltaTime) = 0;
 
     /**
      * \brief 

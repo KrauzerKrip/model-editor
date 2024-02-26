@@ -87,6 +87,8 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 
 	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics,
 		&m_pWorld->getRegistry());
+
+	m_pGui = new Gui(m_pTier0, m_pInput, &m_pWorld->getRegistry());
 }
 
 Game::~Game() {
@@ -140,7 +142,7 @@ void Game::init() {
 }
 
 void Game::input() {
-	m_pConsoleGui->update();
+	m_pConsoleGui->frame();
 
 	if (!m_pConsoleGui->isOpened()) { 
 		m_pControlSystem->input();
@@ -178,6 +180,7 @@ void Game::update() {
 
 void Game::render() {
 	m_pGraphicsSystems->frame();
+	m_pGui->frame();
 	m_pRender->render();
 }
 

@@ -11,6 +11,9 @@ add_subdirectory("src/editor/control")
 add_subdirectory("src/editor/character")
 add_subdirectory("src/editor/graphics")
 
+find_package(imguizmo CONFIG REQUIRED)
+target_link_libraries(editor PRIVATE imguizmo::imguizmo)
+
 target_include_directories(editor
     PUBLIC
         $<INSTALL_INTERFACE:/src>

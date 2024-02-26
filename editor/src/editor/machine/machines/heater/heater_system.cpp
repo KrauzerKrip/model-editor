@@ -6,7 +6,7 @@
 
 HeaterSystem::HeaterSystem(entt::registry* pRegistry, PhysicalConstants* pPhysicalConstants) : BaseMachineSystem(pRegistry, pPhysicalConstants) {}
 
-void HeaterSystem::update(float deltaTime) {
+void HeaterSystem::frame(float deltaTime) {
     auto uninitedHeaters = m_pRegistry->view<MachineInit, Heater>();
 
 	for (auto&& [entity, heater] : uninitedHeaters.each()) {

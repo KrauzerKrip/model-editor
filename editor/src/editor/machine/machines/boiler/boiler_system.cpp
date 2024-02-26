@@ -7,7 +7,7 @@
 BoilerSystem::BoilerSystem(entt::registry* pRegistry, PhysicalConstants* pPhysicalConstants) :
 	BaseMachineSystem(pRegistry, pPhysicalConstants) {}
 
-void BoilerSystem::update(float deltaTime) {
+void BoilerSystem::frame(float deltaTime) {
     auto uninitedBoilers = m_pRegistry->view<MachineInit, Boiler>();
 
 	for (auto&& [entity, boiler] : uninitedBoilers.each()) {

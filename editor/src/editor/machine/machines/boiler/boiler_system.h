@@ -7,6 +7,6 @@ class BoilerSystem : public BaseMachineSystem {
 public:
 	BoilerSystem(entt::registry* pRegistry, PhysicalConstants* pPhysicalConstants);
 
-	void update(float deltaTime) override;
+	void frame(float deltaTime) override;
 	void machineUpdate(float deltaTime) override;
 };

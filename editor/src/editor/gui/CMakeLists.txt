@@ -4,5 +4,6 @@ project(gui)
 
 
 target_sources(editor PRIVATE
-
+	"gui.h"
+	"gui.cpp"
 )

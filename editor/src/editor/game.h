@@ -27,6 +27,7 @@
 #include "lc_client/eng_systems/graphics_systems.h"
 #include "editor/control/control_system.h"
 #include "lc_client/eng_npc/npc_system.h"
+#include "gui/gui.h"
 
 
 class Game : public IGameLogic {
@@ -55,6 +56,7 @@ private:
 	PhysicsSystem* m_pPhysicsSystem = nullptr;
 	NpcSystem* m_pNpcSystem = nullptr;
 	ControlSystem* m_pControlSystem = nullptr;
+	Gui* m_pGui = nullptr;
 
 	bool m_guiMode = false;
 

@@ -89,7 +89,7 @@ void ConsoleGui::open() { m_isOpened = true; }
 
 void ConsoleGui::close() { m_isOpened = false; }
 
-void ConsoleGui::update() {
+void ConsoleGui::frame() {
 	if (!m_isOpened) {
 		return;
 	}
