@@ -10,6 +10,7 @@ add_subdirectory("src/editor/camera")
 add_subdirectory("src/editor/control")
 add_subdirectory("src/editor/character")
 add_subdirectory("src/editor/graphics")
+add_subdirectory("src/editor/model")
 
 find_package(imguizmo CONFIG REQUIRED)
 target_link_libraries(editor PRIVATE imguizmo::imguizmo)

@@ -56,6 +56,8 @@ void EditorRender::init() {
 	m_pMeshRender = new MeshRenderGl(m_pUtilRegistry);
 
 	m_pPrimitiveRender = new PrimitiveRender(m_pShaderLoader, m_pRegistry, m_pRegistry);
+
+	glClearColor(64.0f / 255, 64.0f / 255, 64.0f / 255, 1.0f);
 }
 
 void EditorRender::render() {

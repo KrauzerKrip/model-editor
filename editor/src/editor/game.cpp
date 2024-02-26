@@ -88,7 +88,7 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics,
 		&m_pWorld->getRegistry());
 
-	m_pGui = new Gui(m_pTier0, m_pInput, &m_pWorld->getRegistry());
+	m_pGui = new Gui(m_pTier0, m_pInput, m_pTier1->getTextureManager(), &m_pWorld->getRegistry());
 }
 
 Game::~Game() {
