@@ -11,5 +11,12 @@ target_sources(editor PRIVATE
 	"project_saver_xml.h"
 	"project_saver_xml.cpp"
 
+	"i_pack_editor.h"
+	"pack_editor_json.h"
+	"pack_editor_json.cpp"
+
 	"project_data.h"
+
+	"file_writer.h"
+	"file_writer.cpp"
 )

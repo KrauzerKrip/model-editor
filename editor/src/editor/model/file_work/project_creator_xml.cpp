@@ -8,14 +8,19 @@
 #include "lc_client/tier0/tier0.h"
 
 
+struct XmlStringWriter : pugi::xml_writer {
+	std::string result;
 
-ProjectCreatorXml::ProjectCreatorXml(eng::IResource* pResource) {}
+	virtual void write(const void* data, size_t size) { result.append(static_cast<const char*>(data), size); }
+};
+
+
+ProjectCreatorXml::ProjectCreatorXml(eng::IResource* pResource, FileWriter* pFileWriter) {
+	m_pFileWriter = pFileWriter;
+}
 
 void ProjectCreatorXml::create(std::string dirPath, bool createPhysicsFile) { 
-	std::filesystem::directory_entry dir(dirPath);
-	if (!dir.exists()) {
-		std::filesystem::create_directory(dir);
-	}
+	m_pFileWriter->createDirectory(dirPath);
 
 	pugi::xml_document doc;
 
@@ -29,7 +34,9 @@ void ProjectCreatorXml::create(std::string dirPath, bool createPhysicsFile) {
 		modelXml.append_child("physics_file");
 	}
 
-	doc.print(std::cout);
+	XmlStringWriter writer;
+	doc.print(writer);
+	m_pFileWriter->writeString(dirPath + "model.xml", writer.result);
 }
 
 

@@ -8,4 +8,6 @@ target_sources(editor PRIVATE
 	"menu.cpp"
 	"tool_bar.h"
 	"tool_bar.cpp"
+	"inspector.h"
+	"inspector.cpp"
 )

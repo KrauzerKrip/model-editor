@@ -43,6 +43,7 @@
 #include "lc_client/eng_npc/components.h"
 #include "lc_client/eng_physics/physics.h"
 #include "editor/graphics/editor_render.h"
+#include "editor/model/file_work/file_writer.h"
 
 
 Game::Game(IWindow* pWindow, Tier0* pTier0) {
@@ -88,7 +89,7 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics,
 		&m_pWorld->getRegistry());
 
-	Editor* pEditor = new Editor(&m_pWorld->getRegistry(), m_pResource);
+	Editor* pEditor = new Editor(&m_pWorld->getRegistry(), m_pResource, new FileWriter("E:/Industry/industry/res/"));
 
 	m_pGui = new Gui(m_pTier0, m_pInput, pEditor, m_pTier1->getTextureManager(), &m_pWorld->getRegistry());
 }

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "editor/model/editor.h"
 #include "editor/model/project.h"
 
 
 class Menu {
 public:
-	Menu(Project& project);
+	Menu(Editor* pEditor);
 
 	void frame();
 
@@ -16,5 +17,5 @@ private:
 	bool m_createPhysicsFile = false;
 	std::string m_modelName;
 
-	Project& m_project;
+	Editor* m_pEditor = nullptr;
 };

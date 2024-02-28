@@ -3,9 +3,13 @@
 #include "file_work/project_creator_xml.h"
 //#include "file_work/project_loader_xml.h"
 #include "file_work/project_saver_xml.h"
+#include "file_work/pack_editor_json.h"
 
 
-Editor::Editor(entt::registry* pRegistry, eng::IResource* pResource)
-	: m_project("E:/Industry/industry/res/game/models", new ProjectCreatorXml(pResource), nullptr, nullptr, pRegistry) {}
+Editor::Editor(entt::registry* pRegistry, eng::IResource* pResource, FileWriter* pFileWriter)
+	: m_project(new ProjectCreatorXml(pResource, pFileWriter), nullptr, nullptr,
+		  new PackEditorJson("game", pResource, pFileWriter), pRegistry) {}
 
 Project& Editor::getProject() { return m_project; }
+
+void Editor::loadModel() {}

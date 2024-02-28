@@ -7,7 +7,10 @@
 using namespace ImGui;
 
 
-Menu::Menu(Project& project) : m_project(project) { m_windowNew = false; }
+Menu::Menu(Editor* pEditor) { 
+	m_pEditor = pEditor;
+	m_windowNew = false; 
+}
 
 void Menu::frame() {
 	SetNextWindowPos(ImVec2(-1, 0));
@@ -22,6 +25,14 @@ void Menu::frame() {
 			Separator();
 			if (MenuItem("Save")) {}
 			if (MenuItem("Save as")) {}
+
+			EndMenu();
+		}
+
+		if (BeginMenu("Editor")) {
+			if (MenuItem("Load model")) {
+				m_pEditor->loadModel();
+			}
 
 			EndMenu();
 		}
@@ -53,6 +64,8 @@ void Menu::frame() {
 }
 
 void Menu::createProject() {
-	m_project.create(m_modelName, m_createPhysicsFile);
-	m_windowNew = false;
+	if (!m_modelName.empty()) {
+		m_pEditor->getProject().create("game", m_modelName, m_createPhysicsFile);
+		m_windowNew = false;
+	}
 }

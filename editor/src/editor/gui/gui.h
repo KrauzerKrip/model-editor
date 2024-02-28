@@ -9,6 +9,7 @@
 #include "view/tool_bar.h"
 #include "controller/tool_bar_controller.h"
 #include "editor/model/editor.h"
+#include "view/inspector.h"
 
 
 class Gui {
@@ -21,4 +22,5 @@ private:
 	Menu m_menu;
 	ToolBar m_taskBar;
 	ToolBarController m_taskBarController;
+	Inspector m_inspector;
 };

@@ -7,7 +7,7 @@ using namespace ImGui;
 Gui::Gui(Tier0* pTier0, IInput* pInput, Editor* pEditor, TextureManager* pTextureManager, entt::registry* pRegistry)
 	: m_taskBar(pTextureManager),
 	  m_taskBarController(m_taskBar),
-		m_menu(pEditor->getProject()) {
+		m_menu(pEditor), m_inspector(pEditor) {
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	style.Alpha = 1.0f;
@@ -92,6 +92,7 @@ void Gui::frame() {
 
 	m_menu.frame();
 	m_taskBar.frame();
+	m_inspector.frame();
 
 }
 
