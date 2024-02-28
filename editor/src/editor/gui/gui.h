@@ -8,11 +8,12 @@
 #include "view/menu.h"
 #include "view/tool_bar.h"
 #include "controller/tool_bar_controller.h"
+#include "editor/model/editor.h"
 
 
 class Gui {
 public:
-	Gui(Tier0* pTier0, IInput* pInput, TextureManager* pTextureManager, entt::registry* pRegistry);
+	Gui(Tier0* pTier0, IInput* pInput, Editor* pEditor, TextureManager* pTextureManager, entt::registry* pRegistry);
 	
 	void frame();
 
