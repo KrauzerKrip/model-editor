@@ -20,7 +20,21 @@ void Project::create(std::string pack, std::string name, bool createPhysicsFile)
 	m_name = name;
 }
 
-void Project::load(std::string pack, std::string name) {}
+void Project::load(std::string pack, std::string name) {
+	m_pack = pack;
+	m_name = name;
+
+	ProjectData projectData = m_pProjectLoader->load(pack + "/models/" + name + "/");
+
+	m_modelFile = projectData.modelFile;
+	m_materialType = projectData.materialType;
+	m_vertexShader = projectData.vertexShader;
+	m_fragmentShader = projectData.fragmentShader;
+
+	for (auto& callback : m_loadCallbacks) {
+		callback();
+	}
+}
 
 void Project::save() { 
 	ProjectData projectData;
@@ -35,6 +49,8 @@ void Project::save() {
 
 	m_pProjectSaver->save(m_pack + "/models/" + m_name + "/", projectData);
 }
+
+void Project::addLoadingCallback(std::function<void()> callback) { m_loadCallbacks.push_back(callback); }
 
 std::string Project::getPack() const { return m_pack; }
 

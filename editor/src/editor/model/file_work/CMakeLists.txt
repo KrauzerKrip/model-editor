@@ -10,6 +10,8 @@ target_sources(editor PRIVATE
 	"project_creator_xml.cpp"
 	"project_saver_xml.h"
 	"project_saver_xml.cpp"
+	"project_loader_xml.h"
+	"project_loader_xml.cpp"
 
 	"i_pack_editor.h"
 	"pack_editor_json.h"

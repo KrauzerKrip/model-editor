@@ -8,7 +8,7 @@ OrbitalCameraController::OrbitalCameraController(Camera* pCamera, IInput* pInput
 	m_pCamera = pCamera;
 	m_pInput = pInput;
 
-	m_originPosition = glm::vec3(10, 0, 0);
+	m_originPosition = glm::vec3(0, 0, 0);
 	m_radius = 25;
 
 	m_lastMousePosition = glm::vec2(0);

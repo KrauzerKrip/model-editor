@@ -7,7 +7,18 @@
 using namespace ImGui;
 
 
-Inspector::Inspector(Editor* pEditor) { m_pEditor = pEditor; }
+Inspector::Inspector(Editor* pEditor) { 
+	m_pEditor = pEditor;
+
+	m_pEditor->getProject().addLoadingCallback([this]() { 
+		const Project& project = m_pEditor->getProject();
+
+		m_modelFile = project.m_modelFile;
+		m_materialType = project.m_materialType;
+		m_vertexShader = project.m_vertexShader;
+		m_fragmentShader = project.m_fragmentShader;
+	});
+}
 
 void Inspector::frame() {
 	ImVec2 size(400, 512);
@@ -19,7 +30,11 @@ void Inspector::frame() {
 	SetNextWindowSize(size);
 
 	const char* materialTypes[] = {"SG", "MR"};
-	static int currentItem = 0;
+	
+	int currentItem = 0;
+	if (m_materialType == "mr") {
+		currentItem = 1;
+	}
 
 	if (Begin("Inspector", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus)) {
 		PushItemWidth(140);

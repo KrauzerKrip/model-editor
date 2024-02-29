@@ -6,6 +6,7 @@
 
 #include "lc_client/eng_physics/entt/components.h"
 #include "lc_client/eng_scene/entt/components.h"
+#include "lc_client/eng_physics/physics_parser.h"
 
 
 struct ProjectData {
@@ -13,5 +14,5 @@ struct ProjectData {
 	std::string materialType;
 	std::string vertexShader;
 	std::string fragmentShader;
-	std::vector<std::tuple<ColliderType, Transform>> colliders;
+	std::vector<ColliderData> colliders;
 };

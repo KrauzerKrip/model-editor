@@ -82,14 +82,16 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 	m_pGraphicsSystems = new GraphicsSystems(m_pTier0, m_pTier1, pLoaderFabric->getShaderLoaderGl(), pLoaderFabric->getMeshLoader(), pLoaderFabric->getCubemapLoader(), m_pWorld, pModelManager, pModelParser);
 
 	Physics* pPhysics = new Physics(&m_pWorld->getRegistry());
-	PhysicsLoader* pPhysicsLoader = new PhysicsLoader(new PhysicsParser(m_pResource), &m_pWorld->getRegistry());
+	PhysicsParser* pPhysicsParser = new PhysicsParser(m_pResource);
+	PhysicsLoader* pPhysicsLoader = new PhysicsLoader(pPhysicsParser, &m_pWorld->getRegistry());
 	m_pPhysicsSystem = new PhysicsSystem(
 		pPhysics, pPhysicsLoader, pTier0->getParameters(), &m_pWorld->getRegistry(), m_pTier0->getConsole());
 
 	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics,
 		&m_pWorld->getRegistry());
 
-	Editor* pEditor = new Editor(&m_pWorld->getRegistry(), m_pResource, new FileWriter("E:/Industry/industry/res/"));
+	Editor* pEditor =
+		new Editor(&m_pWorld->getRegistry(), m_pResource, new FileWriter("E:/Industry/industry/res/"), pPhysicsParser);
 
 	m_pGui = new Gui(m_pTier0, m_pInput, pEditor, m_pTier1->getTextureManager(), &m_pWorld->getRegistry());
 }

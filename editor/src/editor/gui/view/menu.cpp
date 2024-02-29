@@ -22,7 +22,10 @@ void Menu::frame() {
 			if (MenuItem("New")) {
 				m_windowNew = true;
 			}
-			if (MenuItem("Open")) {}
+			if (MenuItem("Open")) {
+				m_pEditor->getProject().load("game", "cat");
+				m_pEditor->loadModel();
+			}
 			Separator();
 			if (MenuItem("Save")) {
 				try {

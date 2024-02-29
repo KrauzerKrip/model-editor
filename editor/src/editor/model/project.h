@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include <entt/entt.hpp>
+#include <functional>
 
 #include "file_work/i_project_creator.h"
 #include "file_work/i_project_loader.h"
@@ -25,6 +26,8 @@ public:
 	void load(std::string pack, std::string name);
 	void save();
 
+	void addLoadingCallback(std::function<void()> callback);
+
 	std::string getPack() const;
 	std::string getName() const;
 
@@ -34,6 +37,8 @@ public:
 	std::string m_fragmentShader;
 
 private:
+	std::vector<std::function<void()>> m_loadCallbacks;
+
 	IProjectCreator* m_pProjectCreator = nullptr;
 	IProjectLoader* m_pProjectLoader = nullptr;
 	IProjectSaver* m_pProjectSaver = nullptr;
