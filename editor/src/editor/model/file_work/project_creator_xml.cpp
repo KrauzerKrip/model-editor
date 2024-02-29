@@ -8,12 +8,6 @@
 #include "lc_client/tier0/tier0.h"
 
 
-struct XmlStringWriter : pugi::xml_writer {
-	std::string result = "<?xml version=\" 1.0 \" encoding=\" utf - 8 \"?>\n\n";
-
-	virtual void write(const void* data, size_t size) { result.append(static_cast<const char*>(data), size); }
-};
-
 
 ProjectCreatorXml::ProjectCreatorXml(eng::IResource* pResource, FileWriter* pFileWriter) {
 	m_pFileWriter = pFileWriter;
@@ -36,13 +30,9 @@ void ProjectCreatorXml::create(std::string dirPath, bool createPhysicsFile) {
 		pugi::xml_document docPhysics;
 		docPhysics.append_child("physics");
 
-		XmlStringWriter writer;
-		docPhysics.print(writer);
-		m_pFileWriter->writeString(dirPath + "physics.xml", writer.result);
+		m_pFileWriter->writeXml(dirPath + "physics.xml", docPhysics);
 	}
 
-	XmlStringWriter writer;
-	docModel.print(writer);
-	m_pFileWriter->writeString(dirPath + "model.xml", writer.result);
+	m_pFileWriter->writeXml(dirPath + "model.xml", docModel);
 }
 

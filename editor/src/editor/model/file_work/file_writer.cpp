@@ -3,6 +3,13 @@
 #include <fstream>
 
 
+struct XmlStringWriter : pugi::xml_writer {
+	std::string result = "<?xml version=\" 1.0 \" encoding=\" utf - 8 \"?>\n\n";
+
+	virtual void write(const void* data, size_t size) { result.append(static_cast<const char*>(data), size); }
+};
+
+
 FileWriter::FileWriter(std::string resPath) { m_resPath = resPath; }
 
 void FileWriter::writeJson(std::string filePath, const json& json) { 
@@ -15,6 +22,12 @@ void FileWriter::writeJson(std::string filePath, const json& json) {
 		stream << json;
 		stream.close();
 	}
+}
+
+void FileWriter::writeXml(std::string filePath, const pugi::xml_document& xml) {
+	XmlStringWriter writer;
+	xml.print(writer);
+	writeString(filePath, writer.result);
 }
 
 void FileWriter::writeString(std::string filePath, const std::string& data) {

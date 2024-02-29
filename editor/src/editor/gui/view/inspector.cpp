@@ -38,8 +38,18 @@ void Inspector::frame() {
 			ImGui::EndCombo();
 		}
 
+		m_materialType = std::string(materialTypes[currentItem]);
+		
+		std::transform(m_materialType.begin(), m_materialType.end(), m_materialType.begin(),
+			[](unsigned char c) { return std::tolower(c); });
+
 		InputText("Vertex shader", &m_vertexShader);
 		InputText("Fragment shader", &m_fragmentShader);
+
+		m_pEditor->getProject().m_modelFile = m_modelFile;
+		m_pEditor->getProject().m_materialType = m_materialType;
+		m_pEditor->getProject().m_vertexShader = m_vertexShader;
+		m_pEditor->getProject().m_fragmentShader = m_fragmentShader;
 
 		End();
 	}

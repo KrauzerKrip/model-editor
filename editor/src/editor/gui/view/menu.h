@@ -11,9 +11,12 @@ public:
 	void frame();
 
 private:
+	void showNoProject();
+
 	void createProject();
 
 	bool m_windowNew;
+	bool m_windowNoProject;
 	bool m_createPhysicsFile = false;
 	std::string m_modelName;
 

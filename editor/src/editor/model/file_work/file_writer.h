@@ -3,6 +3,7 @@
 #include <string>
 
 #include <nlohmann/json.hpp>
+#include <pugixml.hpp>
 
 
 using json = nlohmann::json;
@@ -21,6 +22,7 @@ public:
 	FileWriter(std::string absoluteResPath);
 
 	void writeJson(std::string filePath, const json& json);
+	void writeXml(std::string filePath, const pugi::xml_document& xml);
 	void writeString(std::string filePath, const std::string& data);
 	void createDirectory(std::string dirPath);
 

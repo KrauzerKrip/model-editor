@@ -10,6 +10,7 @@ using namespace ImGui;
 Menu::Menu(Editor* pEditor) { 
 	m_pEditor = pEditor;
 	m_windowNew = false; 
+	m_windowNoProject = false;
 }
 
 void Menu::frame() {
@@ -23,7 +24,14 @@ void Menu::frame() {
 			}
 			if (MenuItem("Open")) {}
 			Separator();
-			if (MenuItem("Save")) {}
+			if (MenuItem("Save")) {
+				try {
+					m_pEditor->getProject().save();
+				}
+				catch (NoProjectException& exception) {
+					m_windowNoProject = true;
+				}
+			}
 			if (MenuItem("Save as")) {}
 
 			EndMenu();
@@ -39,6 +47,10 @@ void Menu::frame() {
 
 
 		EndMainMenuBar();
+	}
+
+	if (m_windowNoProject) {
+		this->showNoProject();
 	}
 
 	if (m_windowNew) {
@@ -61,6 +73,20 @@ void Menu::frame() {
 	}
 
 
+}
+
+void Menu::showNoProject() { 
+	SetNextWindowPos(ImVec2(GetMainViewport()->GetCenter().x - 256, GetMainViewport()->GetCenter().y - 80));
+	SetNextWindowSize(ImVec2(512, 150));
+	if (Begin("Exception", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize)) {
+		Text("No project loaded.");
+
+		if (Button("Ok")) {
+			m_windowNoProject = false;
+		}
+
+		End();
+	}
 }
 
 void Menu::createProject() {

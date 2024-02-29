@@ -7,7 +7,7 @@
 
 
 Editor::Editor(entt::registry* pRegistry, eng::IResource* pResource, FileWriter* pFileWriter)
-	: m_project(new ProjectCreatorXml(pResource, pFileWriter), nullptr, nullptr,
+	: m_project(new ProjectCreatorXml(pResource, pFileWriter), nullptr, new ProjectSaverXml(pResource, pFileWriter),
 		  new PackEditorJson("game", pResource, pFileWriter), pRegistry) {}
 
 Project& Editor::getProject() { return m_project; }

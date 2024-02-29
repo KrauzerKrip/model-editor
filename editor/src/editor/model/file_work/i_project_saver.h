@@ -9,6 +9,6 @@ class IProjectSaver {
 public:
 	virtual ~IProjectSaver() = default;
 
-	virtual void save(const ProjectData& data) = 0;
+	virtual void save(std::string dirPath, const ProjectData& projectData) = 0;
 };
 
