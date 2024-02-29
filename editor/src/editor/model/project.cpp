@@ -35,3 +35,7 @@ void Project::save() {
 
 	m_pProjectSaver->save(m_pack + "/models/" + m_name + "/", projectData);
 }
+
+std::string Project::getPack() const { return m_pack; }
+
+std::string Project::getName() const { return m_name; }

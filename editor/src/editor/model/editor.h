@@ -16,4 +16,6 @@ public:
 	 
 private:
 	Project m_project;
+
+	entt::registry* m_pRegistry = nullptr;
 };

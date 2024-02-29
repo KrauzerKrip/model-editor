@@ -102,10 +102,7 @@ Game::~Game() {
 	delete m_pTier0;
 };
 
-void Game::init() {
-	m_pWorld->loadMap("dev", "test");
-	m_pWorld->loadScene("dev", "test");
-
+void Game::init()  {
 	m_pInput->addMappedKeyCallback(KeyCode::GRAVE_ACCENT, [pConsoleGui = this->m_pConsoleGui, pWindow = this->m_pWindow]() {
 		if (pConsoleGui->isOpened()) {
 			pConsoleGui->close();

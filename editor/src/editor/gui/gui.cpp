@@ -93,7 +93,6 @@ void Gui::frame() {
 	m_menu.frame();
 	m_taskBar.frame();
 	m_inspector.frame();
-
 }
 
 

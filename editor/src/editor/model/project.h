@@ -25,6 +25,9 @@ public:
 	void load(std::string pack, std::string name);
 	void save();
 
+	std::string getPack() const;
+	std::string getName() const;
+
 	std::string m_modelFile;
 	std::string m_materialType;
 	std::string m_vertexShader;
