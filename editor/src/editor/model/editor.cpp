@@ -10,9 +10,10 @@
 
 Editor::Editor(
 	entt::registry* pRegistry, eng::IResource* pResource, FileWriter* pFileWriter, PhysicsParser* pPhysicsParser)
-	: m_project(new ProjectCreatorXml(pResource, pFileWriter), new ProjectLoaderXml(pResource, pPhysicsParser),
+	: m_pPackEditor(new PackEditorJson(pResource, pFileWriter)),
+	  m_project(new ProjectCreatorXml(pResource, pFileWriter), new ProjectLoaderXml(pResource, pPhysicsParser),
 		  new ProjectSaverXml(pResource, pFileWriter),
-		  new PackEditorJson("game", pResource, pFileWriter), pRegistry) {
+		  m_pPackEditor, pRegistry) {
 	m_pRegistry = pRegistry;
 }
 
@@ -23,4 +24,8 @@ void Editor::loadModel() {
 	m_pRegistry->emplace<Transform>(entity, Transform());
 	m_pRegistry->emplace<ModelRequest>(entity, ModelRequest(m_project.getPack(), m_project.getName(), false));
 	m_pRegistry->emplace<ShaderRequest>(entity, ShaderRequest("dev", "base", "base_material"));
+}
+
+std::vector<std::tuple<std::string, std::string>> Editor::getPackModels(std::string pack) {
+	return m_pPackEditor->getPackModels(pack);
 }

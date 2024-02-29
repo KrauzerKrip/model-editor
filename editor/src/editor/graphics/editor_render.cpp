@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
+#include <ImGuizmo.h>
 
 #include "lc_client/eng_graphics/entt/components.h"
 #include "lc_client/eng_graphics/texture.h"
@@ -52,15 +54,30 @@ void EditorRender::init() {
 		delete m_pFramebuffer;
 		m_pFramebuffer = new Framebuffer(width, height);
 		});
-
+	 
 	m_pMeshRender = new MeshRenderGl(m_pUtilRegistry);
 
 	m_pPrimitiveRender = new PrimitiveRender(m_pShaderLoader, m_pRegistry, m_pRegistry);
 
 	glClearColor(64.0f / 255, 64.0f / 255, 64.0f / 255, 1.0f);
+
+	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+	//ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+	ImGuizmo::SetRect(0, 0, m_pWindow->getSize()[0], m_pWindow->getSize()[1]);
 }
 
+unsigned int iDebug = 0;
+
+
 void EditorRender::render() {
+	ImGuizmo::BeginFrame();
+
+	iDebug++;
+	if (iDebug > 1000) {
+		int i = 0;
+	}
+
+
 	m_pFramebuffer->bind();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -71,10 +88,34 @@ void EditorRender::render() {
 	glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 1000.0f);
 	glm::mat4 view = m_pCamera->getViewMatrix(); // glm::mat4(1.0f);
 
-	// opaque
+	auto opaqueModels = m_pRegistry->view<Transform, Model, ShaderGl>();
 
-	glDepthFunc(GL_LEQUAL);
-	glDepthFunc(GL_LESS);
+	for (auto&& [entity, transform, model, shader] : opaqueModels.each()) {
+		std::vector<entt::entity>& meshes = model.meshes;
+		unsigned int shaderProgram = shader.shaderProgram;
+		glUseProgram(shaderProgram);
+
+		setUniform(shaderProgram, "viewPos", m_pCamera->getPosition());
+
+		if (m_pRegistry->all_of<ShaderUniforms>(entity)) {
+			const ShaderUniforms& uniforms = m_pRegistry->get<ShaderUniforms>(entity);
+
+			for (auto&& [k, v] : uniforms.floatUniforms) {
+				setUniform(shaderProgram, k, v);
+			}
+			for (auto&& [k, v] : uniforms.vectorUniforms) {
+				setUniform(shaderProgram, k, v);
+			}
+		}
+
+		m_pMeshRender->setUp(transform, shaderProgram, projection, view);
+
+		for (entt::entity& meshEntity : meshes) {
+			m_pMeshRender->renderMesh(meshEntity);
+		}
+	}
+
+	ImGuizmo::DrawGrid(glm::value_ptr(view), glm::value_ptr(projection), glm::value_ptr(glm::mat4(1.0)), 100.f);
 
 	glDepthMask(false);
 	// transparent
@@ -114,5 +155,16 @@ void EditorRender::createFramebufferVao() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+}
+
+const float* EditorRender::mat4toArray(const glm::mat4& mat) { 
+	float* pArray = new float[16];
+
+	const float* pSource = (const float*)glm::value_ptr(mat);
+	for (int i = 0; i < 16; ++i) {
+		pArray[i] = pSource[i];
+	}
+	
+	return pArray;
 }
 

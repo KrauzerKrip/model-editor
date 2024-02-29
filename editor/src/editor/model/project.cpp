@@ -14,7 +14,7 @@ void Project::create(std::string pack, std::string name, bool createPhysicsFile)
 	m_pRegistry->clear();
 
 	m_pProjectCreator->create(pack + "/models/" + name + "/", createPhysicsFile);
-	m_pPackEditor->addModel(name);
+	m_pPackEditor->addModel(pack, name);
 
 	m_pack = pack;
 	m_name = name;

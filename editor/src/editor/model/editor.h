@@ -1,5 +1,8 @@
 #pragma once
 
+#include <tuple>
+#include <string>
+
 #include <entt/entt.hpp>
 
 #include "lc_client/util/i_eng_resource.h"
@@ -15,8 +18,10 @@ public:
 
 	Project& getProject();
 	void loadModel();
+	std::vector<std::tuple<std::string, std::string>> getPackModels(std::string pack);
 	 
 private:
+	IPackEditor* m_pPackEditor = nullptr;
 	Project m_project;
 
 	entt::registry* m_pRegistry = nullptr;

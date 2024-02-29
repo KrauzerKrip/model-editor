@@ -34,13 +34,15 @@ public:
 	EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderWork, World* pWorld);
 	~EditorRender();
 
-	void init();
-	void render();
-	void clear();
-	void cleanUp();
+	void init() override;
+	void render() override;
+	void clear() override;
+	void cleanUp() override;
 
 private:
 	void createFramebufferVao();
+
+	const float* mat4toArray(const glm::mat4& mat);
 
 	IWindow* m_pWindow; //mb remove it
 	Camera* m_pCamera;

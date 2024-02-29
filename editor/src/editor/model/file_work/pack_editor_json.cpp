@@ -8,17 +8,30 @@
 using json = nlohmann::json;
 
 
-PackEditorJson::PackEditorJson(std::string pack, eng::IResource* pResource, FileWriter* pFileWriter) { 
-	m_pack = pack;
+PackEditorJson::PackEditorJson(eng::IResource* pResource, FileWriter* pFileWriter) { 
 	m_pResource = pResource;
 	m_pFileWriter = pFileWriter;
 }
 
-void PackEditorJson::addModel(std::string name) {
-	std::vector<unsigned char> buffer = m_pResource->getFileResource(m_pack + "/pack.json");
+void PackEditorJson::addModel(std::string pack, std::string name) {
+	std::vector<unsigned char> buffer = m_pResource->getFileResource(pack + "/pack.json");
 	auto descriptor = json::parse(buffer);
 	auto& models = descriptor.at("models");
-	models[name] = m_pack + "/models/" + name + "/";
+	models[name] = pack + "/models/" + name + "/";
 
-	m_pFileWriter->writeJson(m_pack + "/pack.json", descriptor);
+	m_pFileWriter->writeJson(pack + "/pack.json", descriptor);
+}
+
+std::vector<std::tuple<std::string, std::string>> PackEditorJson::getPackModels(std::string pack) {
+	std::vector<unsigned char> buffer = m_pResource->getFileResource(pack + "/pack.json");
+	auto descriptor = json::parse(buffer);
+	auto& modelsJson = descriptor.at("models");
+
+	std::vector<std::tuple<std::string, std::string>> models; 
+
+	for (auto& model : modelsJson.items()) {
+		models.push_back(std::make_tuple(static_cast<std::string>(model.key()), static_cast<std::string>(model.value())));
+	}
+
+	return models;
 }
