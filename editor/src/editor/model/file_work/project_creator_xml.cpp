@@ -9,7 +9,7 @@
 
 
 struct XmlStringWriter : pugi::xml_writer {
-	std::string result;
+	std::string result = "<?xml version=\" 1.0 \" encoding=\" utf - 8 \"?>\n\n";
 
 	virtual void write(const void* data, size_t size) { result.append(static_cast<const char*>(data), size); }
 };
@@ -22,9 +22,9 @@ ProjectCreatorXml::ProjectCreatorXml(eng::IResource* pResource, FileWriter* pFil
 void ProjectCreatorXml::create(std::string dirPath, bool createPhysicsFile) { 
 	m_pFileWriter->createDirectory(dirPath);
 
-	pugi::xml_document doc;
+	pugi::xml_document docModel;
 
-	auto modelXml = doc.append_child("model");
+	auto modelXml = docModel.append_child("model");
 	modelXml.append_child("model_file");
 	modelXml.append_child("material_type");
 	modelXml.append_child("vertex_shader");
@@ -32,20 +32,17 @@ void ProjectCreatorXml::create(std::string dirPath, bool createPhysicsFile) {
 
 	if (createPhysicsFile) {
 		modelXml.append_child("physics_file");
+
+		pugi::xml_document docPhysics;
+		docPhysics.append_child("physics");
+
+		XmlStringWriter writer;
+		docPhysics.print(writer);
+		m_pFileWriter->writeString(dirPath + "physics.xml", writer.result);
 	}
 
 	XmlStringWriter writer;
-	doc.print(writer);
+	docModel.print(writer);
 	m_pFileWriter->writeString(dirPath + "model.xml", writer.result);
 }
 
-
-//<?xml version="1.0" encoding="utf-8"?>
-//
-//<model>
-//  <model_file>model.dae</model_file>
-//  <material_type>sg</material_type>
-//  <vertex_shader>base</vertex_shader>
-//  <fragment_shader>lighting</fragment_shader>
-//  <physics_file>physics.xml</physics_file>
-//</model>
