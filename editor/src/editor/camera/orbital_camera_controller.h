@@ -26,6 +26,7 @@ private:
 	float m_radiusChangeSpeed;
 	float m_targetRadius;
 	float m_minimusRadius;
+	float m_cameraMoveSpeedFactor;
 	
 	glm::vec2 m_lastMousePosition;
 };
