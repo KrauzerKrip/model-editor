@@ -24,6 +24,7 @@
 #include "lc_client/eng_graphics/openGL/renders/gl_opaque_render.h"
 #include "lc_client/eng_graphics/openGL/renders/gl_outline_render.h"
 
+
 class ShaderLoaderGl;
 
 class EditorRender : public IRender {
@@ -31,7 +32,7 @@ class EditorRender : public IRender {
 	friend class RenderMapGl;
 
 public:
-	EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderWork, World* pWorld);
+	EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld);
 	~EditorRender();
 
 	void init() override;
@@ -39,6 +40,7 @@ public:
 	void clear() override;
 	void cleanUp() override;
 
+	bool m_imguiIsDepthTestEnabled;
 private:
 	void createFramebufferVao();
 
@@ -57,4 +59,6 @@ private:
 	unsigned int m_framebufferTexture = 0;
 	unsigned int m_framebufferVao = 0;
 	unsigned int m_framebufferShader = 0;
+	unsigned int m_cubeVao;
+	unsigned int m_colliderShader;
 };

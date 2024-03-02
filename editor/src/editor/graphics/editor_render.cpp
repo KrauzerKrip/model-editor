@@ -16,18 +16,62 @@
 #include "lc_client/eng_graphics/openGL/gl_shader_uniform.h"
 #include "lc_client/eng_cubemaps/entt/components.h"
 #include "lc_client/eng_graphics/openGL/renders/gl_mesh_render.h"
+#include "lc_client/eng_physics/entt/components.h"
 
 #include "lc_client/tier0/tier0.h"
 
 
-EditorRender::EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderWork, World* pWorld) {
+EditorRender::EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld) {
 	m_pWindow = pWindow; // mb remove it
 	m_pCamera = pCamera;
-	m_pShaderLoader = pShaderWork;
+	m_pShaderLoader = pShaderLoader;
 	m_pFramebuffer = new Framebuffer(pWindow->getSize()[0], pWindow->getSize()[1]);
 
 	m_pRegistry = &pWorld->getRegistry();
 	m_pUtilRegistry = &pWorld->getUtilRegistry();
+
+	m_imguiIsDepthTestEnabled = false;
+
+	m_colliderShader = pShaderLoader->createShaderProgram("primitive", "primitive_alpha");
+
+	 float cubeVertices[] = {// front
+
+		-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+		// back
+		-1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0};
+
+	GLuint cubeIndices[] = {// front
+		0, 1, 2, 2, 3, 0,
+		// right
+		1, 5, 6, 6, 2, 1,
+		// back
+		7, 6, 5, 5, 4, 7,
+		// left
+		4, 0, 3, 3, 7, 4,
+		// bottom
+		4, 5, 1, 1, 0, 4,
+		// top
+		3, 2, 6, 6, 7, 3};
+
+	unsigned int cubeVbo;
+	unsigned int cubeEbo;
+
+	glGenVertexArrays(1, &m_cubeVao);
+	glGenBuffers(1, &cubeVbo);
+	glBindVertexArray(m_cubeVao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &cubeEbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeEbo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 EditorRender::~EditorRender() {}
@@ -62,7 +106,7 @@ void EditorRender::init() {
 	glClearColor(64.0f / 255, 64.0f / 255, 64.0f / 255, 1.0f);
 
 	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
-	//ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+	ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
 	ImGuizmo::SetRect(0, 0, m_pWindow->getSize()[0], m_pWindow->getSize()[1]);
 }
 
@@ -115,12 +159,35 @@ void EditorRender::render() {
 		}
 	}
 
-	ImGuizmo::DrawGrid(glm::value_ptr(view), glm::value_ptr(projection), glm::value_ptr(glm::mat4(1.0)), 100.f);
-
 	glDepthMask(false);
-	// transparent
+	auto cubeEntities = m_pRegistry->view<BoxCollider, Transform>();
+	glUseProgram(m_colliderShader);
+	for (auto&& [entity, transform] : cubeEntities.each()) {
+		glm::mat4 mvp = projection * view;
+
+		glBindVertexArray(m_cubeVao);
+
+		setUniform(m_colliderShader, "color", glm::vec4(111.0 / 255.0, 174 / 255.0, 225.0 / 255.0, 0.5));
+
+		glm::mat4 model(1.0);
+
+		model = glm::translate(model, transform.position);
+		model *= glm::mat4_cast(transform.rotation);
+		model = glm::scale(model, transform.scale);
+
+		mvp *= model;
+
+		unsigned int mvpLoc = glGetUniformLocation(m_colliderShader, "mvp");
+		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
+
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+		glBindVertexArray(0);
+	}
+
 	glDepthMask(true);
 	m_pPrimitiveRender->render(projection, view);
+	glDisable(GL_DEPTH_TEST);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
 	m_pFramebuffer->bindTexture();
@@ -167,4 +234,3 @@ const float* EditorRender::mat4toArray(const glm::mat4& mat) {
 	
 	return pArray;
 }
-
