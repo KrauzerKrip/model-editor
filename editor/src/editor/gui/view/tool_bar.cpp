@@ -91,5 +91,3 @@ void ToolBar::frame() {
 }
 
 void ToolBar::setActiveToolbarTool(ButtonType type) { m_activeToolbarTool = type; }
-
-ButtonType ToolBar::getActive() { return m_activeButton; }

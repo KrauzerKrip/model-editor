@@ -11,6 +11,13 @@
 #include "file_work/file_writer.h"
 
 
+enum class ToolMode {
+	SELECT,
+	MOVE,
+	ROTATE,
+	SCALE
+};
+
 class Editor {
 public:
 	Editor(
@@ -19,10 +26,14 @@ public:
 	Project& getProject();
 	void loadModel();
 	std::vector<std::tuple<std::string, std::string>> getPackModels(std::string pack);
-	 
+	void setToolMode(ToolMode mode);
+	ToolMode getToolMode();
+	void createCollider(ColliderType type);
+
 private:
 	IPackEditor* m_pPackEditor = nullptr;
 	Project m_project;
+	ToolMode m_toolMode;
 
 	entt::registry* m_pRegistry = nullptr;
 };

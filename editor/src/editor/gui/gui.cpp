@@ -6,7 +6,7 @@ using namespace ImGui;
 
 Gui::Gui(Tier0* pTier0, IInput* pInput, Editor* pEditor, TextureManager* pTextureManager, entt::registry* pRegistry)
 	: m_taskBar(pTextureManager),
-	  m_taskBarController(m_taskBar),
+	  m_taskBarController(m_taskBar, pEditor),
 		m_menu(pEditor), m_inspector(pEditor) {
 	ImGuiStyle& style = ImGui::GetStyle();
 

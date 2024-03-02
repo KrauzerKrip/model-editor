@@ -15,6 +15,7 @@ Editor::Editor(
 		  new ProjectSaverXml(pResource, pFileWriter),
 		  m_pPackEditor, pRegistry) {
 	m_pRegistry = pRegistry;
+	m_toolMode = ToolMode::SELECT;
 }
 
 Project& Editor::getProject() { return m_project; }
@@ -28,4 +29,25 @@ void Editor::loadModel() {
 
 std::vector<std::tuple<std::string, std::string>> Editor::getPackModels(std::string pack) {
 	return m_pPackEditor->getPackModels(pack);
+}
+
+void Editor::setToolMode(ToolMode mode) {
+	m_toolMode = mode; 
+}
+
+ToolMode Editor::getToolMode() { return m_toolMode; }
+
+void Editor::createCollider(ColliderType type) { 
+	auto entity = m_pRegistry->create();
+	auto modelEntities = m_pRegistry->view<Colliders>();
+
+	m_pRegistry->emplace<Transform>(entity);
+
+	if (type == ColliderType::BOX) {
+		m_pRegistry->emplace<BoxCollider>(entity);
+	}
+
+	for (auto&& [ent, colliders] : modelEntities.each()) {
+		colliders.colliders.push_back(std::make_tuple(entity, type));
+	}
 }

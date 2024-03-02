@@ -12,10 +12,10 @@ public:
 	void frame();
 
 	void setActiveToolbarTool(ButtonType type);
-	ButtonType getActive();
+
+	ButtonType m_activeButton;
 
 private:
-	ButtonType m_activeButton;
 	ButtonType m_activeToolbarTool;
 	
 	unsigned int m_selectionTexture;
