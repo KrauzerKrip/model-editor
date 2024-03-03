@@ -75,9 +75,6 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 		m_pResource, m_pTier1->getTextureManager(), m_pWorld->getUtilRegistry(), m_pTier0->getConsole());
 	ModelParser* pModelParser = new ModelParser(m_pResource);
 
-	m_pRender = new EditorRender(m_pWindow, m_pCamera, pLoaderFabric->getShaderLoaderGl(), m_pWorld);
-
-	m_pRender->init();
 
 	m_pGraphicsSystems = new GraphicsSystems(m_pTier0, m_pTier1, pLoaderFabric->getShaderLoaderGl(), pLoaderFabric->getMeshLoader(), pLoaderFabric->getCubemapLoader(), m_pWorld, pModelManager, pModelParser);
 
@@ -87,11 +84,15 @@ Game::Game(IWindow* pWindow, Tier0* pTier0) {
 	m_pPhysicsSystem = new PhysicsSystem(
 		pPhysics, pPhysicsLoader, pTier0->getParameters(), &m_pWorld->getRegistry(), m_pTier0->getConsole());
 
-	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics,
-		&m_pWorld->getRegistry());
-
 	Editor* pEditor =
 		new Editor(&m_pWorld->getRegistry(), m_pResource, new FileWriter("E:/Industry/industry/res/"), pPhysicsParser);
+
+	
+	m_pControlSystem = new ControlSystem(m_pInput, m_pCamera, pPhysics, pEditor, &m_pWorld->getRegistry());
+
+	m_pRender = new EditorRender(m_pWindow, m_pCamera, pLoaderFabric->getShaderLoaderGl(), m_pWorld, pEditor);
+
+	m_pRender->init();
 
 	m_pGui = new Gui(m_pTier0, m_pInput, pEditor, m_pTier1->getTextureManager(), &m_pWorld->getRegistry());
 }

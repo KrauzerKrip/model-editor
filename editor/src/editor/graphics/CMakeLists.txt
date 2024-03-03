@@ -5,4 +5,6 @@ project(graphics)
 target_sources(editor PRIVATE
 	"editor_render.h"
 	"editor_render.cpp"
+	"collider_manipulation.h"
+	"collider_manipulation.cpp"
 )

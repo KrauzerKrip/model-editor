@@ -13,12 +13,13 @@
 #include "editor/camera/camera_controller.h"
 #include "lc_client/eng_physics/physics.h"
 #include "mouse_raycast.h"
+#include "editor/model/editor.h"
 
 
 class ControlSystem {
 public:
 	ControlSystem(IInput* pInput, Camera* pCamera,
-		Physics* pPhysics, 
+		Physics* pPhysics, Editor* pEditor,
 		entt::registry* pRegistry);
 	~ControlSystem();
 

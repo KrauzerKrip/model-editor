@@ -16,7 +16,7 @@ public:
 
 	void input();
 	void update();
-	void onAction(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) override;
+	void onKey(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) override;
 	void onMouseMove(entt::entity entity, glm::vec3 position, float distance);
 
 private:

@@ -5,10 +5,13 @@
 #include "components.h"
 
 
-SelectionSystem::SelectionSystem(entt::registry* pRegistry) { m_pRegistry = pRegistry; }
+SelectionSystem::SelectionSystem(Editor* pEditor, entt::registry* pRegistry) {
+	m_pEditor = pEditor;
+	m_pRegistry = pRegistry;
+}
 
-void SelectionSystem::onAction(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) {
-	if (keyCode == KeyCode::MOUSE_BUTTON_LEFT) {
+void SelectionSystem::onKey(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) {
+	if (keyCode == KeyCode::MOUSE_BUTTON_LEFT && m_pEditor->getToolMode() == ToolMode::SELECT) {
 		if (m_pRegistry->all_of<Selectable>(entity)) {
 			if (m_pRegistry->all_of<Selected>(entity)) {
 				unselectEntity(entity);

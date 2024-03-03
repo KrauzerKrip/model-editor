@@ -41,7 +41,7 @@ void OpaqueRenderGl::render(const glm::mat4& projection, const glm::mat4& view) 
 		setUniform(shaderProgram, "skybox", TextureType::SKYBOX);
 		setUniform(shaderProgram, "cubemap", TextureType::CUBEMAP);
 		m_pLighting->setLighting(shaderProgram);
-		setUniform(shaderProgram, "viewPos", m_pCamera->getPosition());
+		setUniform(shaderProgram, "viewPos", m_pCamera->getPosition()); 
 
 	    if (m_pRegistry->all_of<ShaderUniforms>(entity)) {
 			const ShaderUniforms& uniforms = m_pRegistry->get<ShaderUniforms>(entity);
@@ -55,7 +55,7 @@ void OpaqueRenderGl::render(const glm::mat4& projection, const glm::mat4& view) 
 		}
 
 		m_pMeshRender->setUp(transform, shaderProgram, projection, view);
-
+		
 		if (m_pRegistry->all_of<Outline>(entity)) {
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glStencilMask(0xFF);

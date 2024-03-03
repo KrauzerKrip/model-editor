@@ -17,11 +17,16 @@
 #include "lc_client/eng_cubemaps/entt/components.h"
 #include "lc_client/eng_graphics/openGL/renders/gl_mesh_render.h"
 #include "lc_client/eng_physics/entt/components.h"
+#include "editor/control/components.h"
 
 #include "lc_client/tier0/tier0.h"
 
 
-EditorRender::EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld) {
+EditorRender::EditorRender(
+	IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld, Editor* pEditor)
+	: m_colliderManipulation(pEditor, &pWorld->getRegistry()),
+	  m_meshRender(&pWorld->getUtilRegistry()),
+	  m_outlineRender(&m_meshRender, pShaderLoader) {
 	m_pWindow = pWindow; // mb remove it
 	m_pCamera = pCamera;
 	m_pShaderLoader = pShaderLoader;
@@ -98,8 +103,7 @@ void EditorRender::init() {
 		delete m_pFramebuffer;
 		m_pFramebuffer = new Framebuffer(width, height);
 		});
-	 
-	m_pMeshRender = new MeshRenderGl(m_pUtilRegistry);
+	
 
 	m_pPrimitiveRender = new PrimitiveRender(m_pShaderLoader, m_pRegistry, m_pRegistry);
 
@@ -152,10 +156,10 @@ void EditorRender::render() {
 			}
 		}
 
-		m_pMeshRender->setUp(transform, shaderProgram, projection, view);
+		m_meshRender.setUp(transform, shaderProgram, projection, view);
 
 		for (entt::entity& meshEntity : meshes) {
-			m_pMeshRender->renderMesh(meshEntity);
+			m_meshRender.renderMesh(meshEntity);
 		}
 	}
 
@@ -180,7 +184,35 @@ void EditorRender::render() {
 		unsigned int mvpLoc = glGetUniformLocation(m_colliderShader, "mvp");
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 
+		if (m_pRegistry->all_of<Selected>(entity)) {
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
+		}
+
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+		if (m_pRegistry->all_of<Selected>(entity)) {
+			Transform transformOutline(transform);
+			transformOutline.scale = transform.scale + 0.1f;
+
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+			glStencilMask(0x00);
+			glUseProgram(m_colliderShader);
+			setUniform(m_colliderShader, "color", glm::vec4(1.0, 102.0 / 255.0, 0, 1.0));
+			glm::mat4 modelOutline(1.0);
+			modelOutline = glm::translate(modelOutline, transform.position);
+			modelOutline *= glm::mat4_cast(transform.rotation);
+			modelOutline = glm::scale(modelOutline, transform.scale + 0.1f);
+			glm::mat4 mvpOutline = projection * view;
+			mvpOutline *= modelOutline;
+			unsigned int mvpLocOutline = glGetUniformLocation(m_colliderShader, "mvp");
+			glUniformMatrix4fv(mvpLocOutline, 1, GL_FALSE, glm::value_ptr(mvpOutline));
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+			glStencilMask(0xFF);
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			glEnable(GL_DEPTH_TEST);
+		}
 
 		glBindVertexArray(0);
 	}
@@ -188,6 +220,8 @@ void EditorRender::render() {
 	glDepthMask(true);
 	m_pPrimitiveRender->render(projection, view);
 	glDisable(GL_DEPTH_TEST);
+
+	m_colliderManipulation.frame(view, projection);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
 	m_pFramebuffer->bindTexture();

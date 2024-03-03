@@ -3,15 +3,16 @@
 #include "editor/camera/orbital_camera_controller.h"
 
 
-ControlSystem::ControlSystem(IInput* pInput, Camera* pCamera, Physics* pPhysics, entt::registry* pRegistry)
+ControlSystem::ControlSystem(
+	IInput* pInput, Camera* pCamera, Physics* pPhysics, Editor* pEditor, entt::registry* pRegistry)
 	: m_mouseRaycast(pPhysics, pInput, pCamera, pRegistry),
-	m_selectionSystem(pRegistry),
+	m_selectionSystem(pEditor, pRegistry),
 	  m_characterControlSystem(pRegistry),
 	  m_mouseRaycastSystem(&m_mouseRaycast, pInput) {
 
 	m_pCameraController = new OrbitalCameraController(pCamera, pInput);
 
-	m_mouseRaycastSystem.addObserver(KeyCode::MOUSE_BUTTON_LEFT, & m_selectionSystem);
+	m_mouseRaycastSystem.addObserver(KeyCode::MOUSE_BUTTON_LEFT, &m_selectionSystem);
 	m_mouseRaycastSystem.addObserver(KeyCode::MOUSE_BUTTON_LEFT, &m_characterControlSystem);
 }
 

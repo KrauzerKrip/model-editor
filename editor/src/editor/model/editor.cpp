@@ -6,6 +6,8 @@
 #include "file_work/pack_editor_json.h"
 
 #include "lc_client/eng_model/entt/components.h"
+#include "editor/control/components.h"
+#include "components.h"
 
 
 Editor::Editor(
@@ -16,6 +18,13 @@ Editor::Editor(
 		  m_pPackEditor, pRegistry) {
 	m_pRegistry = pRegistry;
 	m_toolMode = ToolMode::SELECT;
+	
+	m_project.addLoadingCallback([this]() {
+		m_utilColliderEntity = m_pRegistry->create();
+		m_pRegistry->emplace<Transform>(m_utilColliderEntity, Transform());
+		});
+	m_utilColliderEntity = m_pRegistry->create();
+	m_pRegistry->emplace<Transform>(m_utilColliderEntity, Transform());
 }
 
 Project& Editor::getProject() { return m_project; }
@@ -42,12 +51,16 @@ void Editor::createCollider(ColliderType type) {
 	auto modelEntities = m_pRegistry->view<Colliders>();
 
 	m_pRegistry->emplace<Transform>(entity);
+	m_pRegistry->emplace<Selectable>(entity);
+	m_pRegistry->emplace<Manipulable>(entity);
+	m_pRegistry->emplace<Colliders>(entity).colliders.push_back(std::make_tuple(m_utilColliderEntity, type));
 
 	if (type == ColliderType::BOX) {
 		m_pRegistry->emplace<BoxCollider>(entity);
 	}
 
-	for (auto&& [ent, colliders] : modelEntities.each()) {
-		colliders.colliders.push_back(std::make_tuple(entity, type));
-	}
+
+	//for (auto&& [ent, colliders] : modelEntities.each()) {
+	//	colliders.colliders.push_back(std::make_tuple(entity, type));
+	//}
 }

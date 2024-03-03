@@ -24,6 +24,8 @@ void Project::load(std::string pack, std::string name) {
 	m_pack = pack;
 	m_name = name;
 
+	m_pRegistry->clear();
+
 	ProjectData projectData = m_pProjectLoader->load(pack + "/models/" + name + "/");
 
 	m_modelFile = projectData.modelFile;

@@ -35,5 +35,10 @@ private:
 	Project m_project;
 	ToolMode m_toolMode;
 
+	/**
+	 * @brief Workaround. Needed because core physics.h getIntersections() adds collider (here m_utilColliderEntity) transform and owner transform.
+	 */
+	entt::entity m_utilColliderEntity;
+
 	entt::registry* m_pRegistry = nullptr;
 };

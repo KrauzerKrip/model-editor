@@ -9,4 +9,5 @@ target_sources(editor PRIVATE
 	"editor.cpp"
 	"project.h"
 	"project.cpp"
+	"components.h"
 )

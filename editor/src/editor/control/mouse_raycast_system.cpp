@@ -39,7 +39,7 @@ void MouseRaycastSystem::onAction(KeyCode keyCode, MouseRaycastObserver* pObserv
 
 	if (result.entityIntersectedWith.has_value()) {
 		//for (MouseRaycastObserver* pObserver : m_observers) {
-			pObserver->onAction(keyCode, result.entityIntersectedWith.value(), result.intersectionPoint.value(),
+			pObserver->onKey(keyCode, result.entityIntersectedWith.value(), result.intersectionPoint.value(),
 				result.intersectionDistance.value());
 		//}
 	}

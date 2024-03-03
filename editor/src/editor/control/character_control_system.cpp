@@ -23,7 +23,7 @@ void CharacterControlSystem::input() {
 
 void CharacterControlSystem::update() {}
 
-void CharacterControlSystem::onAction(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) {
+void CharacterControlSystem::onKey(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) {
 	if (keyCode == KeyCode::MOUSE_BUTTON_LEFT) {
 		if (m_pRegistry->all_of<Selectable>(entity)) {
 			return;

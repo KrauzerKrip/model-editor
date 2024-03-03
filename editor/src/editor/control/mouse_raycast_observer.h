@@ -8,6 +8,6 @@
 
 class MouseRaycastObserver {
 public:
-	virtual void onAction(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) = 0;
+	virtual void onKey(KeyCode keyCode, entt::entity entity, glm::vec3 position, float distance) = 0;
 	virtual void onMouseMove(entt::entity entity, glm::vec3 position, float distance) = 0;
 };

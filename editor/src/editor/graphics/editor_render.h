@@ -23,6 +23,8 @@
 #include "lc_client/eng_graphics/openGL/renders/gl_mesh_render.h"
 #include "lc_client/eng_graphics/openGL/renders/gl_opaque_render.h"
 #include "lc_client/eng_graphics/openGL/renders/gl_outline_render.h"
+#include "collider_manipulation.h"
+#include "editor/model/editor.h"
 
 
 class ShaderLoaderGl;
@@ -32,7 +34,7 @@ class EditorRender : public IRender {
 	friend class RenderMapGl;
 
 public:
-	EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld);
+	EditorRender(IWindow* pWindow, Camera* pCamera, ShaderLoaderGl* pShaderLoader, World* pWorld, Editor* pEditor);
 	~EditorRender();
 
 	void init() override;
@@ -46,10 +48,14 @@ private:
 
 	const float* mat4toArray(const glm::mat4& mat);
 
+	ColliderManipulation m_colliderManipulation;
+
+	MeshRenderGl m_meshRender;
+	OutlineRenderGl m_outlineRender;
+
 	IWindow* m_pWindow; //mb remove it
 	Camera* m_pCamera;
 	ShaderLoaderGl* m_pShaderLoader;
-	MeshRenderGl* m_pMeshRender = nullptr;
 	PrimitiveRender* m_pPrimitiveRender = nullptr;
 
 	entt::registry* m_pRegistry = nullptr;
